@@ -1,0 +1,53 @@
+Source: botan1.11
+Section: libs
+Priority: optional
+Maintainer: Tamas Domok <tamas.domok@balabit.com>
+Build-Depends: debhelper (>= 9),
+               libbz2-dev,
+               libgmp3-dev,
+               libssl-dev,
+               python,
+               zlib1g-dev
+Standards-Version: 3.9.6
+Homepage: http://botan.randombit.net/
+
+Package: botan1.11-dbg
+Section: debug
+Priority: extra
+Architecture: any
+Depends: libbotan-1.11-1 (= ${binary:Version}),
+         libbotan1.11-dev (= ${binary:Version}),
+         ${misc:Depends}
+Description: multiplatform crypto library (debug)
+ Botan is a C++ library which provides support for many common cryptographic
+ operations, including encryption, authentication, and X.509v3 certificates and
+ CRLs. A wide variety of algorithms is supported, including RSA, DSA, DES, AES,
+ MD5, and SHA-1.
+ .
+ This package contains the debugging symbols.
+
+Package: libbotan-1.11-1
+Section: libs
+Architecture: any
+Depends: ${misc:Depends},
+         ${shlibs:Depends}
+Description: multiplatform crypto library
+ Botan is a C++ library which provides support for many common cryptographic
+ operations, including encryption, authentication, and X.509v3 certificates and
+ CRLs. A wide variety of algorithms is supported, including RSA, DSA, DES, AES,
+ MD5, and SHA-1.
+
+Package: libbotan1.11-dev
+Section: libdevel
+Architecture: any
+Depends: libbotan-1.11-1 (= ${binary:Version}),
+         ${misc:Depends}
+Conflicts: libbotan1.10-dev
+Replaces: libbotan1.10-dev
+Description: multiplatform crypto library (development)
+ Botan is a C++ library which provides support for many common cryptographic
+ operations, including encryption, authentication, and X.509v3 certificates and
+ CRLs. A wide variety of algorithms is supported, including RSA, DSA, DES, AES,
+ MD5, and SHA-1.
+ .
+ This package contains the development files.

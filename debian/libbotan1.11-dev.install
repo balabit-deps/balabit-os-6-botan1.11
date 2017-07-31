@@ -1,0 +1,5 @@
+/usr/bin/botan
+/usr/include/botan-1.*
+/usr/lib/*.a
+/usr/lib/libbotan-1.*.so
+/usr/lib/pkgconfig/botan-1.*.pc
