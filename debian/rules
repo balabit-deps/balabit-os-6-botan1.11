@@ -29,11 +29,11 @@ override_dh_auto_configure:
 
 override_dh_auto_build:
 	dh_auto_build -- all
+
 override_dh_auto_test:
 ifeq (,$(findstring $(DEB_HOST_GNU_CPU),$(SKIP_TESTS_ON_CPU)))
 	#dh_auto_test -- check
-	#LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:$(CURDIR)" ./check --validate
-	#fixme
+	LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:$(CURDIR)/debian/tmp/usr/lib" ./botan-test
 endif
 
 override_dh_auto_install:
