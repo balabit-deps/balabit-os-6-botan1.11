@@ -223,7 +223,7 @@ void X509_Time::set_to(const std::string& t_spec, ASN1_Tag spec_tag)
 */
 bool X509_Time::passes_sanity_check() const
    {
-   if(m_year < 1950 || m_year > 2100)
+   if(m_year < 1950 || m_year > 5000)
       return false;
    if(m_month == 0 || m_month > 12)
       return false;

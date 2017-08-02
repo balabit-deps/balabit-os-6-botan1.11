@@ -1,0 +1,52 @@
+#!/usr/bin/make -f
+
+DEB_HOST_GNU_CPU ?= $(shell dpkg-architecture -qDEB_HOST_GNU_CPU)
+CONFIGURE_FLAGS = --cpu=$(DEB_HOST_GNU_CPU)
+
+# SKIP_TESTS_ON_CPU="arm ia64 mips mipsel sparc sh4"
+
+# Because we used --cpu=generic before, 64bit arches did not use 64bit BigInt.
+# Using --cpu=$arch would enable it, and break ABI.
+# CONFIGURE_FLAGS += --disable-modules=mp_asm64,mp_amd64
+
+# Debian hardening
+DPKG_EXPORT_BUILDFLAGS = 1
+include /usr/share/dpkg/default.mk
+
+export DPKG_GENSYMBOLS_CHECK_LEVEL=0
+
+%:
+	dh ${@}
+
+override_dh_auto_clean:
+	dh_auto_clean
+
+	rm -f Makefile check libbotan-*.so libbotan.a
+	rm -rf build
+
+override_dh_auto_configure:
+	./configure.py --prefix=/usr --destdir=$(CURDIR)/debian/tmp/usr --cc=gcc --os=linux --with-debug-info --with-bzip2 --with-openssl --with-zlib $(CONFIGURE_FLAGS)
+
+override_dh_auto_build:
+	dh_auto_build -- all
+
+override_dh_auto_test:
+ifeq (,$(findstring $(DEB_HOST_GNU_CPU),$(SKIP_TESTS_ON_CPU)))
+	#dh_auto_test -- check
+	LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:$(CURDIR)/debian/tmp/usr/lib" ./botan-test
+endif
+
+override_dh_auto_install:
+	dh_auto_install -- DESTDIR=$(CURDIR)/debian/tmp/usr
+	# Removing useless files
+	rm -rf debian/tmp/usr/share/doc/botan-*
+	rm -rf debian/tmp/usr/lib/python2.7/site-packages/botan.py
+
+override_dh_install:
+	dh_install --fail-missing
+
+override_dh_strip:
+	dh_strip --dbg-package=botan1.11-dbg
+
+override_dh_installdocs:
+	dh_installdocs -Xlicense.txt
